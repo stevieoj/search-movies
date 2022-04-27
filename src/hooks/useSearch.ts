@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useQuery } from "react-query";
-import { moviesAPI } from "../apis";
+import { Movie, moviesAPI } from "../apis";
 import debounce from "lodash.debounce";
 
 type Options = {
@@ -31,11 +31,12 @@ export const useSearchMovies = function (opts?: Options) {
     return false;
   };
 
-  const getResult = () => {
-    if (Array.isArray(query.data?.rows)) {
-      return query.data.rows.slice(0, maxResults);
+  const getResult = (): Movie[] => {
+    const rows = query.data?.rows || []
+    if (rows.length) {
+      return rows.slice(0, maxResults);
     }
-    return query.data?.rows;
+    return query.data?.rows || [];
   };
 
   const clearSearch = () => {

@@ -11,7 +11,7 @@ import "./index.css";
 const queryClient = new QueryClient();
 
 const rootElement = document.getElementById("root");
-const root = ReactDom.createRoot(rootElement);
+const root = ReactDom.createRoot(rootElement as Element);
 
 root.render(
   <StrictMode>

@@ -23,12 +23,8 @@ export function App() {
   const showResults = () => setShowList(true);
   const closeResults = () => setShowList(false);
 
-  const inputRef = React.useRef<HTMLInputElement>();
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const wrapRef = useDetectClickOutside({ onTriggered: closeResults });
-
-  const wouldShowList = () => {
-    return Array.isArray(results) && showList;
-  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     search(e.target.value);
@@ -40,7 +36,9 @@ export function App() {
 
   const clearAll = () => {
     clearSearch();
-    inputRef.current.value = "";
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
 
   const onSelect = (movie: Movie) => {
@@ -54,13 +52,13 @@ export function App() {
       if (highlighted) {
         onSelect(highlighted);
         setHighlighted(null);
-        inputRef.current.blur();
+        inputRef.current && inputRef.current.blur();
       }
     }
   };
 
   const showSelectedMovie = () => {
-    if (selected && !wouldShowList()) {
+    if (selected && !showList) {
       return (
         <HStack spacing={4}>
           <Text>{selected.title}</Text>
@@ -78,7 +76,7 @@ export function App() {
   };
 
   const renderResults = () => {
-    if (wouldShowList()) {
+    if (showList) {
       return (
         <List
           borderWidth="1px"
