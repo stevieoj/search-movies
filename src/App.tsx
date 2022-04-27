@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   Text,
-  HStack,
 } from "@chakra-ui/react";
 import { useSearchMovies } from "./hooks/useSearchMovies";
 import { Movie } from "./apis";
@@ -60,10 +59,9 @@ export function App() {
   const showSelectedMovie = () => {
     if (selected && !showList) {
       return (
-        <HStack spacing={4}>
-          <Text>{selected.title}</Text>
-          <Text>Rank: {selected.rank}</Text>
-        </HStack>
+        <Box>
+          <h4>{selected.title}</h4>
+        </Box>
       );
     }
   };
