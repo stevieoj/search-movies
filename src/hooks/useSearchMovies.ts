@@ -22,21 +22,21 @@ export const useSearchMovies = function (opts?: Options) {
     }, 500)
   );
 
-  const checkHasNoResults = () => {
-    if (query.data && !query.data.rows?.length) {
-      if (!query.isLoading) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   const getResult = (): Movie[] => {
     const rows = query.data?.rows || [];
     if (rows.length) {
       return rows.slice(0, maxResults);
     }
     return query.data?.rows || [];
+  };
+
+  const checkHasNoResults = () => {
+    if(keyword && !query.isLoading) {
+      if(!getResult().length) {
+        return true;
+      }
+    }
+    return false;
   };
 
   const clear = () => {

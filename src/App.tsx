@@ -10,10 +10,14 @@ import {
   InputRightElement,
   CloseButton,
   Spinner,
+  Icon,
+  Center,
+  VStack,
 } from "@chakra-ui/react";
 import { useSearchMovies } from "./hooks";
 import { Movie } from "./apis";
 import { useDetectClickOutside } from "react-detect-click-outside";
+import { AiOutlineInbox } from "react-icons/ai";
 
 export function App() {
   const { keyword, results, ...searchMovies } = useSearchMovies({
@@ -63,16 +67,23 @@ export function App() {
   const showSelectedMovie = () => {
     if (selected && !showList) {
       return (
-        <Box>
-          <h4>{selected.title}</h4>
+        <Box mt={2}>
+          <h4 style={{ fontSize: 26 }}>{selected.title}</h4>
         </Box>
       );
     }
   };
 
   const showNoResults = () => {
-    if (searchMovies.noResults && showList) {
-      return <Text m={3}>No Results Found</Text>;
+    if (searchMovies.noResults) {
+      return (
+        <VStack spacing={1}>
+          <Text m={3}>We searched and found nothing!</Text>
+          <Icon w={30} h={30} as={AiOutlineInbox} />;
+        </VStack>
+      );
+    } else if (!results.length) {
+      return <Icon w={30} h={30} as={AiOutlineInbox} />;
     }
     return null;
   };
@@ -103,7 +114,7 @@ export function App() {
               {i < results.length - 1 ? <Divider /> : null}
             </Box>
           ))}
-          {showNoResults()}
+          <Center p={10}>{showNoResults()}</Center>
         </List>
       );
     }
