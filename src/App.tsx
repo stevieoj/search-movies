@@ -8,7 +8,7 @@ import {
   Text,
   HStack,
 } from "@chakra-ui/react";
-import { useSearchMovies } from "./hooks/useSearch";
+import { useSearchMovies } from "./hooks/useSearchMovies";
 import { Movie } from "./apis";
 import { useDetectClickOutside } from "react-detect-click-outside";
 
@@ -82,7 +82,7 @@ export function App() {
           borderWidth="1px"
           borderColor="gray.200"
           borderRadius="md"
-          minH={100}
+          minH={90}
           boxShadow="6px 5px 8px rgba(0,50,30,0.02)"
         >
           {results.map((item, i) => (
@@ -98,7 +98,7 @@ export function App() {
                   {item.title} (rank: {item.rank})
                 </Text>
               </ListItem>
-              <Divider />
+              {i < results.length - 1 ? <Divider /> : null}
             </Box>
           ))}
           {showNoResults()}
