@@ -32,22 +32,23 @@ export const useSearchMovies = function (opts?: Options) {
   };
 
   const getResult = (): Movie[] => {
-    const rows = query.data?.rows || []
+    const rows = query.data?.rows || [];
     if (rows.length) {
       return rows.slice(0, maxResults);
     }
     return query.data?.rows || [];
   };
 
-  const clearSearch = () => {
+  const clear = () => {
     setKeyword("");
   };
 
   return {
+    clear,
     search,
     keyword,
-    clearSearch,
     results: getResult(),
+    isLoading: query.isLoading,
     noResults: checkHasNoResults(),
   };
 };

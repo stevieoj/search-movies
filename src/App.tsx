@@ -6,13 +6,17 @@ import {
   List,
   ListItem,
   Text,
+  InputGroup,
+  InputRightElement,
+  CloseButton,
+  Spinner,
 } from "@chakra-ui/react";
-import { useSearchMovies } from "./hooks/useSearchMovies";
+import { useSearchMovies } from "./hooks";
 import { Movie } from "./apis";
 import { useDetectClickOutside } from "react-detect-click-outside";
 
 export function App() {
-  const { search, clearSearch, keyword, results, noResults } = useSearchMovies({
+  const { keyword, results, ...searchMovies } = useSearchMovies({
     maxResults: 10,
   });
   const [selected, setSelected] = React.useState<Movie>();
@@ -26,7 +30,7 @@ export function App() {
   const wrapRef = useDetectClickOutside({ onTriggered: closeResults });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    search(e.target.value);
+    searchMovies.search(e.target.value);
   };
 
   const onFocus = () => {
@@ -34,7 +38,7 @@ export function App() {
   };
 
   const clearAll = () => {
-    clearSearch();
+    searchMovies.clear();
     if (inputRef.current) {
       inputRef.current.value = "";
     }
@@ -67,7 +71,7 @@ export function App() {
   };
 
   const showNoResults = () => {
-    if (noResults && showList) {
+    if (searchMovies.noResults && showList) {
       return <Text m={3}>No Results Found</Text>;
     }
     return null;
@@ -109,14 +113,27 @@ export function App() {
   return (
     <Box style={{ padding: 30 }}>
       <Box ref={wrapRef}>
-        <Input
-          ref={inputRef}
-          placeholder="Search"
-          aria-label="search"
-          onChange={onChange}
-          onFocus={onFocus}
-          onKeyDown={onKeyDown}
-        />
+        <InputGroup>
+          <Input
+            ref={inputRef}
+            placeholder="Search"
+            aria-label="search"
+            onChange={onChange}
+            onFocus={onFocus}
+            onKeyDown={onKeyDown}
+          />
+          <InputRightElement
+            children={<Spinner hidden={!searchMovies.isLoading} />}
+          />
+          <InputRightElement
+            children={
+              <CloseButton
+                disabled={searchMovies.isLoading}
+                onClick={clearAll}
+              />
+            }
+          />
+        </InputGroup>
         <Box mt={1}>
           {renderResults()}
           {showSelectedMovie()}
