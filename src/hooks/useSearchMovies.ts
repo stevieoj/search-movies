@@ -27,7 +27,7 @@ export const useSearchMovies = function (opts?: Options) {
     if (rows.length) {
       return rows.slice(0, maxResults);
     }
-    return query.data?.rows || [];
+    return rows;
   };
 
   const checkHasNoResults = () => {
